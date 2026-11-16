@@ -1,0 +1,11 @@
+# salon: live co-editing rooms for Facile Suite apps, the y-websocket room engine with app hooks.
+
+kind: lib
+
+ignore: [.git, target, node_modules, dist, build, coverage]
+extensions: [.rs, .ts, .sh]
+
+disabled:
+  - gen.line.long   # rustfmt owns line width (rustfmt.toml sets 120)
+
+failOn: error

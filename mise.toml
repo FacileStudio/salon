@@ -1,0 +1,15 @@
+[tools]
+lefthook = "latest"
+bun = "1.4.2"
+node = "24"
+
+[hooks]
+postinstall = "lefthook install"
+
+[tasks.check]
+description = "Run the full quality gate: rustfmt, clippy, the Rust tests, the client check and tests, filet"
+run = "sh ./scripts/check.sh"
+
+[tasks.test]
+description = "Run the Rust and client tests only"
+run = "cargo test --locked && bun run test"

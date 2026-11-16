@@ -1,0 +1,37 @@
+{
+	"name": "@facile/salon",
+	"version": "0.1.0",
+	"license": "MIT",
+	"description": "The browser side of salon rooms: open a Yjs document over y-websocket, report the connection, stop on a terminal close",
+	"type": "module",
+	"main": "./src/lib/index.ts",
+	"types": "./src/lib/index.ts",
+	"exports": {
+		".": {
+			"types": "./src/lib/index.ts",
+			"default": "./src/lib/index.ts"
+		}
+	},
+	"files": [
+		"src/lib",
+		"spec"
+	],
+	"scripts": {
+		"check": "tsc --noEmit -p tsconfig.json",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"lib0": "^0.2.120"
+	},
+	"peerDependencies": {
+		"y-websocket": "^3.1.0",
+		"yjs": "^13.6.33"
+	},
+	"devDependencies": {
+		"jsdom": "^31.0.0",
+		"typescript": "~6",
+		"vitest": "^5.1.0",
+		"y-websocket": "^3.1.0",
+		"yjs": "^13.6.33"
+	}
+}
