@@ -19,10 +19,7 @@ impl<H: Host> Room<H> {
         match self.host.save(self.key, &mut self.space, due, author).await {
             Saved::Flushed => (self.owed.unflushed, self.owed.flush_at) = (false, None),
             Saved::Stored => self.owed = Owed::default(),
-            Saved::Retry => {
-                tracing::error!(room = %self.key, "salon: saving the {} failed, retrying", self.policy.noun);
-                self.owed.flush_at = Some(Instant::now() + self.policy.retry);
-            }
+            Saved::Retry => self.owed.flush_at = Some(Instant::now() + self.policy.retry),
             Saved::Gone => self.vanish(),
         }
     }

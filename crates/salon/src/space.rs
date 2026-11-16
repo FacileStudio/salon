@@ -23,4 +23,10 @@ pub trait Space: Default + Send + 'static {
     fn writable(&self) -> bool {
         true
     }
+
+    /// The updates already stored but not yet folded into a snapshot when the room loaded, and
+    /// their weight: the room owes their snapshot as if it had accepted them itself.
+    fn backlog(&self) -> (usize, usize) {
+        (0, 0)
+    }
 }

@@ -11,6 +11,7 @@ use yrs::sync::Awareness;
 use crate::command::{Command, Out, Who};
 use crate::drain::{answer_gone, refuse_all};
 use crate::hooks::{Host, Policy};
+use crate::space::Space;
 
 /// One member's connection inside a room.
 pub(crate) struct Conn {
@@ -83,7 +84,10 @@ impl<H: Host> Room<H> {
     fn new(host: H, key: Uuid, space: H::Space) -> Self {
         let policy = host.rooms().1;
         let (awareness, conns) = (Awareness::new(yrs::Doc::new()), HashMap::new());
-        let (owed, empty_since, ended) = (Owed::default(), Some(Instant::now()), false);
+        let (count, bytes) = space.backlog();
+        let since = (count > 0).then(Instant::now);
+        let owed = Owed { count, bytes, since, ..Owed::default() };
+        let (empty_since, ended) = (Some(Instant::now()), false);
         Room { host, key, policy, space, awareness, conns, owed, empty_since, ended }
     }
 

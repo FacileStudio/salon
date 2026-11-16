@@ -75,7 +75,8 @@ pub trait Host: Clone + Send + Sync + 'static {
     /// Loads the document of room `key`.
     fn open(&self, key: Uuid) -> impl Future<Output = Result<Self::Space, Fault>> + Send;
 
-    /// Stores `space` as `due` asks. `author` is the last member who changed it, when known.
+    /// Stores `space` as `due` asks. `author` is the last member who changed it, when known. A
+    /// failed store answers [`Saved::Retry`] after logging its cause: salon does not log it.
     fn save(
         &self,
         key: Uuid,
