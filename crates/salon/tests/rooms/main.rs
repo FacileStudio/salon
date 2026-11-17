@@ -2,4 +2,5 @@
 
 mod members;
 mod server;
+mod shutdown;
 mod support;

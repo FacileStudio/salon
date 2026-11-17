@@ -25,8 +25,9 @@ impl<H: Host> Room<H> {
             Command::Evict(users) => self.evict(&users).await,
             Command::Revoke(share) => self.close_where(|conn| conn.who.share == Some(share)),
             Command::Shutdown(code, reason, done) => {
+                let closed = self.conns.keys().copied().collect();
                 self.stop(code, &reason).await;
-                _ = done.send(());
+                _ = done.send(closed);
                 return false;
             }
         }

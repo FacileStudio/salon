@@ -58,12 +58,14 @@ async fn serve<H: Host>(socket: WebSocket, host: H, key: Uuid, caller: Caller) {
     let (outbox, inbox) = mpsc::channel(OUTBOX);
     let hub = host.rooms().0.clone();
     let conn = hub.next_id();
+    let open = hub.open_socket(conn);
     let member = Member { conn, who: caller.who.clone(), outbox };
     if let Err(fault) = hub.ask(&host, key, |reply| Command::Join(member.clone(), reply)).await {
         _ = sink.send(close(1011, fault.message)).await;
         return;
     }
     pump(&host, key, conn, &caller, (sink, stream, inbox)).await;
+    drop(open);
     hub.tell(key, Command::Leave(conn)).await;
 }
 

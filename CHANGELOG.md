@@ -6,6 +6,14 @@ All notable changes to `salon` are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-17
+
+### Fixed
+
+- `Hub::shutdown` returns only once every member it closed has had its close frame written, or
+  after `SHUTDOWN_WAIT` (2 s). An app that exits right after shutdown no longer drops the
+  frames, so members see the code the app chose instead of `1006`.
+
 ## [0.1.0] - 2026-11-16
 
 ### Added

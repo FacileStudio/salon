@@ -1,6 +1,6 @@
 {
 	"name": "@facile/salon",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"license": "MIT",
 	"description": "The browser side of salon rooms: open a Yjs document over y-websocket, report the connection, stop on a terminal close",
 	"type": "module",

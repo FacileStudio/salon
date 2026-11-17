@@ -63,7 +63,9 @@ is a new version.
    (`board deleted`, `document deleted`).
 6. When the app closes rooms or stops, it picks the code: Docs closes with `1001`
    `server restarting` in both cases; Toile closes a deleted board with `1008`
-   `board deleted` and stops with `1013` `server restarting`.
+   `board deleted` and stops with `1013` `server restarting`. On a stop, the server writes
+   every member's close frame before it lets the process exit; it waits at most 2 s, so a
+   member that stopped reading cannot hold the stop and sees `1006` instead.
 7. A room that cannot load its document closes the joining socket with `1011` and the load
    error.
 
@@ -100,7 +102,7 @@ ships no channel code: channels arrive with their first app.
 | 3.2, 3.4 | `rooms/presence.rs` | `rooms/clients.rs` | `members::a_member_cannot_speak_for_another_members_presence_and_its_name_is_the_servers`, `server::presence_passes_unchanged_when_the_app_names_nobody` |
 | 3.3 | `rooms/presence.rs` `MAX_CLIENTS` | none (new for Docs) | `members::a_member_announcing_more_than_eight_presence_ids_is_closed` |
 | 5.1 | `rooms/ws.rs` `close` | `rooms/ws.rs` `close` | `server::a_long_close_reason_is_cut_on_a_character_boundary` |
-| 5.6 | `rooms/drain.rs` | `rooms/hub.rs` `close` | `server::close_snapshots_then_closes_its_members_with_the_code_given` |
+| 5.6 | `rooms/drain.rs` | `rooms/hub.rs` `close` | `server::close_snapshots_then_closes_its_members_with_the_code_given`, `shutdown::shutdown_returns_only_after_every_member_got_its_close_frame`, `shutdown::a_member_that_stopped_reading_does_not_hold_shutdown_past_its_wait` |
 | 5.7, 7.2 | `rooms/drain.rs` `refuse_all` | `rooms/drain.rs` `refuse_all` | `server::a_missing_document_answers_its_load_fault_to_reads_and_writes`, `server::a_refused_write_answers_the_app_error_and_saves_nothing` |
 | 6.1 to 6.3 | `client/src/lib/board/provider.ts` | `client/src/lib/collab.ts` | `src/lib/room.test.ts` |
 | 7.1, 7.3 | `rooms/writes.rs` | `rooms/writes.rs` | `server::a_server_write_is_relayed_saved_and_answered_after_the_save` |

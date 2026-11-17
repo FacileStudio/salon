@@ -11,6 +11,7 @@ use uuid::Uuid;
 use crate::command::Command;
 use crate::hooks::Host;
 use crate::room;
+use crate::sockets::Sockets;
 
 /// How many commands wait for one room before senders block.
 pub const QUEUE: usize = 1024;
@@ -21,17 +22,18 @@ type Rooms<S> = HashMap<Uuid, (u64, mpsc::Sender<Command<S>>)>;
 pub struct Hub<H: Host> {
     rooms: Arc<Mutex<Rooms<H::Space>>>,
     ids: Arc<AtomicU64>,
+    pub(crate) sockets: Sockets,
 }
 
 impl<H: Host> Clone for Hub<H> {
     fn clone(&self) -> Self {
-        Hub { rooms: self.rooms.clone(), ids: self.ids.clone() }
+        Hub { rooms: self.rooms.clone(), ids: self.ids.clone(), sockets: self.sockets.clone() }
     }
 }
 
 impl<H: Host> Default for Hub<H> {
     fn default() -> Self {
-        Hub { rooms: Arc::default(), ids: Arc::default() }
+        Hub { rooms: Arc::default(), ids: Arc::default(), sockets: Sockets::default() }
     }
 }
 

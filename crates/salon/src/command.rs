@@ -90,6 +90,7 @@ pub(crate) enum Command<S> {
     Evict(Vec<i64>),
     /// Close every connection that came through this share link.
     Revoke(Uuid),
-    /// Save, close every member with this code and reason, and unload.
-    Shutdown(u16, String, oneshot::Sender<()>),
+    /// Save, close every member with this code and reason, and unload; answers the connections
+    /// it closed.
+    Shutdown(u16, String, oneshot::Sender<Vec<u64>>),
 }

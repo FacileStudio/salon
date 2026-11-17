@@ -18,12 +18,14 @@ mod members;
 mod persist;
 mod presence;
 mod room;
+mod sockets;
 mod space;
 mod sync;
 mod writes;
 mod ws;
 
 pub use command::{Member, Out, Who};
+pub use drain::SHUTDOWN_WAIT;
 pub use error::{Fault, Kind, Refusal};
 pub use hooks::{Due, Host, Policy, Saved};
 pub use hub::Hub;
